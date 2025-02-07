@@ -15,16 +15,26 @@ export async function POST(req: NextRequest) {
     const message: string = body.message;
     console.log("Empfangene Nachricht:", message);
 
-    const chatCompletion = await client.chat.completions.create({
-      model: "gpt-4o",
+    const stream = await client.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: message }],
+      stream: true,
     });
 
-    const reply =
-      chatCompletion.choices[0]?.message?.content || "Keine Antwort erhalten.";
+    const streaming = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          if (chunk.choices[0]?.delta?.content) {
+            controller.enqueue(chunk.choices[0].delta.content);
+          }
+        }
+        controller.close();
+      },
+    });
 
-    console.log(reply);
-    return NextResponse.json({ success: true, reply });
+    return new Response(streaming, {
+      headers: { "Content-Type": "text/plain" },
+    });
   } catch (error) {
     console.error("Fehler beim OpenAI-Request:", error);
     return NextResponse.json(
