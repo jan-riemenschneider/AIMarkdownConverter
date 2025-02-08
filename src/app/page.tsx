@@ -1,9 +1,10 @@
 "use client";
-
 import { useChat } from "ai/react";
 
 export default function MyOwnChatbot() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+  });
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-500 p-4">

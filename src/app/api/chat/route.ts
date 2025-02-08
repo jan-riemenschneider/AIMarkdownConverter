@@ -1,17 +1,23 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 
-export const maxDuration = 30;
-
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  try {
+    const { messages } = await req.json();
 
-  const { textStream } = streamText({
-    model: openai("gpt-4o"),
-    messages,
-  });
+    const prompt = messages.map((m) => `${m.role}: ${m.content}`).join("\n");
 
-  for await (const textPart of textStream) {
-    process.stdout.write(textPart);
+    const result = streamText({
+      model: openai("gpt-4o"),
+      prompt,
+      onError({ error }) {
+        console.error("Stream error:", error);
+      },
+    });
+
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error("API Error:", error);
+    return new Response("Internal Server Error", { status: 500 });
   }
 }
