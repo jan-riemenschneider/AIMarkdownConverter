@@ -6,10 +6,12 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const result = streamText({
+  const { textStream } = streamText({
     model: openai("gpt-4o"),
     messages,
   });
 
-  return result.toDataStreamResponse();
+  for await (const textPart of textStream) {
+    process.stdout.write(textPart);
+  }
 }
