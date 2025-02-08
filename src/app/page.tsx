@@ -22,31 +22,19 @@ export default function MyOwnChatbot() {
         body: JSON.stringify({ message: input }),
       });
 
-      if (!res.ok) throw new Error(`Server Error: ${res.status}`);
-
-      if (!res.body) {
-        throw new Error("Keine Antwort vom Server erhalten");
+      if (!res.ok) {
+        throw new Error(`Server Error: ${res.status}`);
       }
 
-      const reader = res.body.getReader();
-      let fullReply = "";
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+      const data = await res.json();
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = new TextDecoder().decode(value);
-        fullReply += chunk;
-
-        setMessages((prev) =>
-          prev.map((msg, index) =>
-            index === prev.length - 1
-              ? { ...msg, content: msg.content + chunk }
-              : msg
-          )
-        );
-      }
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.reply },
+      ]);
+      setTimeout(() => {
+        chatRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 100);
     } catch (error) {
       console.error("Fehler beim API-Request:", error);
       setMessages((prev) => [
