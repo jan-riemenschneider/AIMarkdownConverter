@@ -7,10 +7,16 @@ import { FaArrowUp } from "react-icons/fa6";
 import { CiUser } from "react-icons/ci";
 
 export default function MyOwnChatbot() {
-  const { messages, input, handleInputChange, handleSubmit, setMessages } =
-    useChat({
-      api: "/api/chat",
-    });
+  const {
+    messages,
+    input,
+    isLoading,
+    handleInputChange,
+    handleSubmit,
+    setMessages,
+  } = useChat({
+    api: "/api/chat",
+  });
   const router = useRouter();
 
   const handleRefresh = () => {
@@ -24,10 +30,17 @@ export default function MyOwnChatbot() {
   return (
     <div className="h-screen w-full flex flex-col">
       {/* Navbar */}
-      <header className="navbar bg-base-100">
-        <div className="flex-none"></div>
-        <div className="flex-1" onClick={handleRefresh}>
-          <a className="btn btn-ghost text-xl">AI Markdown Converter</a>
+      <header className="navbar bg-[#e0e1dd]">
+        <Image
+          alt="Logo"
+          src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
+          width={50}
+          height={50}
+        />
+        <div className="flex-1 ml-3" onClick={handleRefresh}>
+          <a className="text-xl font-poppins font-bold">
+            AI Markdown Converter
+          </a>
         </div>
         <div className="flex-none">
           <button className="btn btn-square btn-ghost" onClick={clearMessages}>
@@ -54,7 +67,7 @@ export default function MyOwnChatbot() {
               <div className="chat-image avatar">
                 <div className="w-10">
                   <Image
-                    alt="Tailwind CSS chat bubble component"
+                    alt="Logo"
                     src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
                     width={20}
                     height={20}
@@ -74,10 +87,18 @@ export default function MyOwnChatbot() {
             placeholder="Tip in your text..."
             value={input}
             onChange={handleInputChange}
-            className="input input-bordered flex-1"
+            className="input input-ghost flex-1 font-poppins bg-[#e0e1dd] border-none focus:outline-none focus:border-none"
           />
-          <button type="submit" className="btn btn-circle">
-            <FaArrowUp style={{ fontSize: "25px" }} />
+          <button
+            type="submit"
+            className="btn btn-circle"
+            onClick={isLoading ? () => stop() : handleSubmit}
+          >
+            {isLoading ? (
+              <span className="btn btn-circle loading loading-spinner"></span>
+            ) : (
+              <FaArrowUp style={{ fontSize: "25px" }} />
+            )}
           </button>
         </form>
       </footer>
