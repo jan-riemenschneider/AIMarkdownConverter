@@ -1,63 +1,86 @@
 "use client";
 import { useChat } from "ai/react";
 import Image from "next/image";
+import { RiChatNewLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
+import { FaArrowUp } from "react-icons/fa6";
+import { CiUser } from "react-icons/ci";
 
 export default function MyOwnChatbot() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "/api/chat",
-  });
+  const { messages, input, handleInputChange, handleSubmit, setMessages } =
+    useChat({
+      api: "/api/chat",
+    });
+  const router = useRouter();
+
+  const handleRefresh = () => {
+    router.refresh();
+  };
+
+  const clearMessages = () => {
+    setMessages([]);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAFAFF]">
-      <div className="flex flex-row items-center">
-        <Image
-          src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
-          alt="Image"
-          width={101}
-          height={101}
-        />
-        <div className="w-[648px] h-[100px] text-center">
-          <span className="text-[#3f4045] text-[26px] font-normal font-['Poppins']">
-            Hello! I am your personal{" "}
-          </span>
-          <span className="text-[#3f4045] text-[28px] font-semibold font-['Poppins']">
-            AI Markdown Converter
-          </span>
-          <span className="text-[#3f4045] text-[28px] font-normal font-['Poppins']">
-            .<br />
-          </span>
-          <span className="text-[#3f4045] text-[23px] font-normal font-['Poppins']">
-             <br />
-          </span>
-          <span className="text-[#3f4045] text-lg font-normal font-['Poppins']">
-            Type in your text, and I’ll format it into Markdown instantly!
-          </span>
+    <div className="h-screen w-full flex flex-col">
+      {/* Navbar */}
+      <header className="navbar bg-base-100">
+        <div className="flex-none"></div>
+        <div className="flex-1" onClick={handleRefresh}>
+          <a className="btn btn-ghost text-xl">AI Markdown Converter</a>
         </div>
-      </div>
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md h-80 overflow-y-auto border-b p-2 flex flex-col space-y-2">
-        {messages.map((msg) => (
-          <div key={msg.id} className="whitespace-pre-wrap">
-            {msg.role === "user" ? "User: " : "AI: "}
-            {msg.content}
-          </div>
-        ))}
-      </div>
+        <div className="flex-none">
+          <button className="btn btn-square btn-ghost" onClick={clearMessages}>
+            <RiChatNewLine style={{ fontSize: "25px" }} />
+          </button>
+        </div>
+      </header>
 
-      <form onSubmit={handleSubmit} className="flex gap-2 mt-4">
-        <input
-          type="text"
-          placeholder="Import your Question..."
-          value={input}
-          onChange={handleInputChange}
-          className="flex-1 p-2 border rounded-lg text-black"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        >
-          Send
-        </button>
-      </form>
+      {/* Chat */}
+
+      <section className="flex-1 overflow-y-auto p-4 bg-gray-100 w-full">
+        {messages.map((msg) =>
+          msg.role === "user" ? (
+            <div className="chat chat-start" key={msg.id}>
+              <div className="chat-image avatar">
+                <div className="w-10 rounded-full">
+                  <CiUser style={{ fontSize: "30px" }} />
+                </div>
+              </div>
+              <div className="chat-bubble">{msg.content}</div>
+            </div>
+          ) : (
+            <div className="chat chat-end" key={msg.id}>
+              <div className="chat-image avatar">
+                <div className="w-10">
+                  <Image
+                    alt="Tailwind CSS chat bubble component"
+                    src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+              </div>
+              <div className="chat-bubble">{msg.content}</div>
+            </div>
+          )
+        )}
+      </section>
+
+      <footer className="bg-white p-4 border-t">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Tip in your text..."
+            value={input}
+            onChange={handleInputChange}
+            className="input input-bordered flex-1"
+          />
+          <button type="submit" className="btn btn-circle">
+            <FaArrowUp style={{ fontSize: "25px" }} />
+          </button>
+        </form>
+      </footer>
     </div>
   );
 }
