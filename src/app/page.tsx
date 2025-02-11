@@ -30,13 +30,7 @@ export default function MyOwnChatbot() {
     <div className="h-screen w-full flex flex-col">
       {/* Navbar */}
       <header className="navbar bg-[#e9ecef] px-4">
-        <Image
-          alt="Logo"
-          src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
-          width={50}
-          height={50}
-        />
-        <div className="flex-1 ml-3" onClick={handleRefresh}>
+        <div className="flex-1" onClick={handleRefresh}>
           <a className="font-poppins font-semibold text-xl">
             AI Markdown Converter
           </a>
@@ -50,45 +44,51 @@ export default function MyOwnChatbot() {
 
       {/* Chat */}
 
-      <section className="flex-1 overflow-y-auto px-4 sm:w-[60%] self-center border ">
-        <div className="flex flex-col justify-center items-center border h-full">
-          <div className="flex items-center justify-center border h-auto w-auto">
-            <Image
-              alt="Logo"
-              src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
-              width={101}
-              height={101}
-            />
-            <div className="text-center border">
-              <span className="text-[#3f4045] text-[26px] font-normal font-['Poppins']">
-                Hello! I am your personal{" "}
-              </span>
-              <span className="text-[#3f4045] text-[28px] font-semibold font-['Poppins']">
-                AI Markdown Converter
-              </span>
-              <span className="text-[#3f4045] text-[28px] font-normal font-['Poppins']">
-                .<br />
-              </span>
-              <span className="text-[#3f4045] text-[23px] font-normal font-['Poppins']">
-                 <br />
-              </span>
-              <span className="text-[#3f4045] text-lg font-normal font-['Poppins']">
-                Type in your text, and I’ll format it into Markdown instantly!
-              </span>
-            </div>
-          </div>
-        </div>
-        {messages.map((msg) =>
-          msg.role === "user" ? (
-            <div className="chat chat-start mb-5" key={msg.id}>
-              <div className="chat-bubble bg-[#e9ecef] text-black">
-                {msg.content}
+      <section className="flex-1 overflow-y-auto px-4 sm:w-[60%] self-center">
+        {messages === null || messages.length === 0 ? (
+          
+            <div className="flex items-center justify-center w-auto h-full">
+              <Image
+                className="mx-4"
+                alt="Logo"
+                src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
+                width={101}
+                height={101}
+              />
+              <div className="text-center">
+                <span className="text-[#3f4045] text-[26px] font-normal font-['Poppins']">
+                  Hello! I am your personal{" "}
+                </span>
+                <span className="text-[#3f4045] text-[28px] font-semibold font-['Poppins']">
+                  AI Markdown Converter
+                </span>
+                <span className="text-[#3f4045] text-[28px] font-normal font-['Poppins']">
+                  .<br />
+                </span>
+                <span className="text-[#3f4045] text-[23px] font-normal font-['Poppins']">
+                  <br />
+                </span>
+                <span className="text-[#3f4045] text-lg font-normal font-['Poppins']">
+                  Type in your text, and I’ll format it into Markdown instantly!
+                </span>
               </div>
             </div>
-          ) : (
-            <div className="chat chat-end mb-5" key={msg.id}>
-              <div className="">{msg.content}</div>
-            </div>
+        
+        ) : (
+          messages.map((msg) =>
+            msg.role === "user" ? (
+              <div className="chat chat-start mb-5" key={msg.id}>
+                <div className="chat-bubble bg-[#e9ecef] text-black">
+                  {msg.content}
+                </div>
+              </div>
+            ) : (
+              <div className="chat chat-end mb-5" key={msg.id}>
+                <div className="chat-bubble bg-blue-500 text-white">
+                  {msg.content}
+                </div>
+              </div>
+            )
           )
         )}
       </section>
