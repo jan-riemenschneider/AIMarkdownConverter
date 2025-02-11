@@ -4,12 +4,10 @@ import { streamText } from "ai";
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-
-    const prompt = messages.map((m) => `${m.role}: ${m.content}`).join("\n");
-
+    console.log(messages);
     const result = streamText({
       model: openai("gpt-4o"),
-      prompt: prompt,
+      messages,
       onError({ error }) {
         console.error("Stream error:", error);
       },
