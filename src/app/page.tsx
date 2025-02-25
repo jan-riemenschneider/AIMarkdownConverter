@@ -46,34 +46,32 @@ export default function MyOwnChatbot() {
 
       <section className="flex-1 overflow-y-auto px-4 sm:w-[60%] self-center">
         {messages === null || messages.length === 0 ? (
-          
-            <div className="flex items-center justify-center w-auto h-full">
-              <Image
-                className="mx-4"
-                alt="Logo"
-                src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
-                width={101}
-                height={101}
-              />
-              <div className="text-center">
-                <span className="text-[#3f4045] text-[26px] font-normal font-['Poppins']">
-                  Hello! I am your personal{" "}
-                </span>
-                <span className="text-[#3f4045] text-[28px] font-semibold font-['Poppins']">
-                  AI Markdown Converter
-                </span>
-                <span className="text-[#3f4045] text-[28px] font-normal font-['Poppins']">
-                  .<br />
-                </span>
-                <span className="text-[#3f4045] text-[23px] font-normal font-['Poppins']">
-                  <br />
-                </span>
-                <span className="text-[#3f4045] text-lg font-normal font-['Poppins']">
-                  Type in your text, and I’ll format it into Markdown instantly!
-                </span>
-              </div>
+          <div className="flex items-center justify-center w-auto h-full">
+            <Image
+              className="mx-4"
+              alt="Logo"
+              src="/8188d8d4eb97d1a1839fb576c3aede1ef2750620dd131af11249d03a13704f90 1.png"
+              width={101}
+              height={101}
+            />
+            <div className="text-center">
+              <span className="text-[#3f4045] text-[26px] font-normal font-['Poppins']">
+                Hello! I am your personal{" "}
+              </span>
+              <span className="text-[#3f4045] text-[28px] font-semibold font-['Poppins']">
+                AI Markdown Converter
+              </span>
+              <span className="text-[#3f4045] text-[28px] font-normal font-['Poppins']">
+                .<br />
+              </span>
+              <span className="text-[#3f4045] text-[23px] font-normal font-['Poppins']">
+                <br />
+              </span>
+              <span className="text-[#3f4045] text-lg font-normal font-['Poppins']">
+                Type in your text, and I’ll format it into Markdown instantly!
+              </span>
             </div>
-        
+          </div>
         ) : (
           messages.map((msg) =>
             msg.role === "user" ? (
